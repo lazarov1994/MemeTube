@@ -11,12 +11,12 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-.settings
-target
-.project
-.classpath
-.springBeans
-.metadata
-Servers
-.recommenders
-.classpath
+MemetubeApi/.settings
+MemetubeApi/target
+MemetubeApi/.project
+MemetubeApi/.classpath
+MemetubeApi/.springBeans
+MemetubeApi/.metadata
+MemetubeApi/Servers
+MemetubeApi/.recommenders
+MemetubeApi/.classpath
