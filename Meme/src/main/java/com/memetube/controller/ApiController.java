@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.memetube.Meme;
+import com.memetube.models.Meme;
 
 import io.jsonwebtoken.Claims;
 
@@ -31,9 +31,9 @@ public class ApiController {
 	@RequestMapping(value = "/getMeme")
 	public ResponseEntity<Meme> get() {
 		Meme meme = new Meme();
-		meme.setId(5L);
+		meme.setId(5);
 		meme.setTitle("John Snow");
-		meme.setUserId(2L);
+		meme.setUserId(2);
 
 		return new ResponseEntity<Meme>(meme, HttpStatus.OK);
 	}
