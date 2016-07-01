@@ -14,8 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.memetube.models.Meme;
 import com.memetube.service.UserService;
 
 import io.jsonwebtoken.Jwts;
@@ -57,6 +59,12 @@ public class UserController {
 
 		return new LoginResponse(Jwts.builder().setSubject(login.username).claim("roles", userDb.get(login.username))
 				.setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretkey").compact());
+	}
+	
+	@RequestMapping(value = "/meme", method = RequestMethod.GET)
+	public ResponseEntity<Meme> get(@RequestParam("category_id") int categoryId, @RequestParam("page") int page, @RequestParam("page_size") int pageSize) {
+		//ms.getFrankenstainMeme ? 
+		return new ResponseEntity<Meme>(HttpStatus.OK);
 	}
 
 	@SuppressWarnings("unused")
