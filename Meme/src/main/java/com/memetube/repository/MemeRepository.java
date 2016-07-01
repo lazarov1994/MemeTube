@@ -2,11 +2,13 @@ package com.memetube.repository;
 
 import java.util.List;
 
-import com.memetube.models.Meme;
+import com.memetube.models.Category;
 import com.memetube.models.VoteMeme;
 
 public interface MemeRepository {
-    public Meme getMeme(int id);
+    public List<Category> getAllCategories();
+
+    public VoteMeme addMeme(String title, String image, int category, int userId);
 
     public List<VoteMeme> getMemesForCategory(Integer categoryId, int page, int pageSize);
 }

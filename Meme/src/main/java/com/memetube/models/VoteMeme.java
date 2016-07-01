@@ -49,10 +49,6 @@ public class VoteMeme {
         this.downvotes = downvotes;
     }
 
-    public int getRating() {
-        return getUpvotes() - getDownvotes();
-    }
-
     public String getTitle() {
         return title;
     }

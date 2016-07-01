@@ -73,4 +73,30 @@ public class UserRepositoryJdbc implements UserRepository {
 
     }
 
+    @Override
+    public void userVote(String username, int memeId, boolean upvote) {
+        jdbcTmpl.execute(new PreparedStatementCreator() {
+
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                String sql = " INSERT INTO vote(user_id, meme_id, info) VALUES(" + " (select u.id from user u where u.username = ?), ?, ?) ";
+                // can add multiple votes TODO fix it
+
+                PreparedStatement ps = con.prepareStatement(sql);
+                ps.setString(1, username);
+                ps.setInt(2, memeId);
+                ps.setInt(3, upvote ? 1 : -1);
+                return ps;
+            }
+        }, new PreparedStatementCallback<User>() {
+
+            @Override
+            public User doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                ps.execute();
+                return null;
+            }
+        });
+
+    }
+
 }

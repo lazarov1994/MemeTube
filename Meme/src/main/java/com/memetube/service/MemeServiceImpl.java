@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.memetube.models.Meme;
+import com.memetube.models.Category;
 import com.memetube.models.VoteMeme;
 import com.memetube.repository.MemeRepository;
 
@@ -18,13 +18,18 @@ public class MemeServiceImpl implements MemeService {
     private MemeRepository memeRepo;
 
     @Override
-    public Meme getMeme(int id) {
-        return memeRepo.getMeme(id);
+    public VoteMeme addMeme(String title, String image, int category, int userId) {
+        return memeRepo.addMeme(title, image, category, userId);
     }
 
     @Override
     public List<VoteMeme> getMemesForCategory(Integer categoryId, int page, int pageSize) {
         return memeRepo.getMemesForCategory(categoryId, page, pageSize);
+    }
+
+    @Override
+    public List<Category> getAllCategories() {
+        return memeRepo.getAllCategories();
     }
 
 }
