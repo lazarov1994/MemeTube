@@ -85,7 +85,11 @@ public class MemeRepositoryJdbc implements MemeRepository {
                 return m;
             }
         });
-
+        int numOfMemes = memes.size();
+        if(numOfMemes <= pageSize) {
+            return memes;
+        } //else if (numOfMemes <){
+        
         return memes;
     }
 

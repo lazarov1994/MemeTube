@@ -38,6 +38,12 @@ public class UserController {
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public LoginResponse login(@RequestBody final UserCredentials login)
         throws ServletException {
+    	
+    	us.authenticateUser(login.username, login.password);
+    	
+    	
+    	
+    	
         if (login.username == null || !userDb.containsKey(login.username)) {
             throw new ServletException("Invalid login");
         }
