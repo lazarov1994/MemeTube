@@ -14,8 +14,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.memetube.models.Meme;
 import com.memetube.service.UserService;
 
 import io.jsonwebtoken.Jwts;
@@ -27,61 +29,56 @@ public class UserController {
 
 	@Autowired
 	private UserService us;
+
+	private final Map<String, List<String>> userDb = new HashMap<>();
+
+	public UserController() {
+		userDb.put("tom", Arrays.asList("user"));
+		userDb.put("sally", Arrays.asList("user", "admin"));
+	}
+
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	public LoginResponse login(@RequestBody final UserCredentials login) throws ServletException {
+
+
+		if (!us.authenticateUser(login.username, login.password)) {
+			throw new ServletException("Invalid login");
+		}
+		return new LoginResponse(Jwts.builder().setSubject(login.username).claim("roles", userDb.get(login.username))
+				.setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretkey").compact());
+	}
+
+	@RequestMapping(value = "auth", method = RequestMethod.POST)
+	public LoginResponse auth(@RequestBody final UserCredentials login) throws ServletException {
+
+		if (login.username == null || login.password == null) {
+			throw new ServletException("Invalid login");
+		}
+
+		us.insertUser(login.username, login.password);
+
+		return new LoginResponse(Jwts.builder().setSubject(login.username).claim("roles", userDb.get(login.username))
+				.setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretkey").compact());
+	}
 	
-    private final Map<String, List<String>> userDb = new HashMap<>();
+	@RequestMapping(value = "/meme", method = RequestMethod.GET)
+	public ResponseEntity<Meme> get(@RequestParam("category_id") int categoryId, @RequestParam("page") int page, @RequestParam("page_size") int pageSize) {
+		//ms.getFrankenstainMeme ? 
+		return new ResponseEntity<Meme>(HttpStatus.OK);
+	}
 
-    public UserController() {
-        userDb.put("tom", Arrays.asList("user"));
-        userDb.put("sally", Arrays.asList("user", "admin"));
-    }
+	@SuppressWarnings("unused")
+	private static class UserCredentials {
+		public String username;
+		public String password;
+	}
 
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public LoginResponse login(@RequestBody final UserCredentials login)
-        throws ServletException {
-    	
-    	us.authenticateUser(login.username, login.password);
-    	
-    	
-    	
-    	
-        if (login.username == null || !userDb.containsKey(login.username)) {
-            throw new ServletException("Invalid login");
-        }
-        return new LoginResponse(Jwts.builder().setSubject(login.username)
-            .claim("roles", userDb.get(login.username)).setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
-    }
-    
-    
-    @RequestMapping(value = "auth", method = RequestMethod.POST)
-    public LoginResponse auth(@RequestBody final UserCredentials login)
-    	
-    
-    
-        throws ServletException {
-        if (login.username == null || !userDb.containsKey(login.username)) {
-            throw new ServletException("Invalid login");
-        }
-        return new LoginResponse(Jwts.builder().setSubject(login.username)
-            .claim("roles", userDb.get(login.username)).setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
-    }
-    
-    
-    
+	@SuppressWarnings("unused")
+	private static class LoginResponse {
+		public String token;
 
-    @SuppressWarnings("unused")
-    private static class UserCredentials {
-        public String username;
-        public String password;
-    }
-
-    @SuppressWarnings("unused")
-    private static class LoginResponse {
-        public String token;
-
-        public LoginResponse(final String token) {
-            this.token = token;
-        }
-    }
+		public LoginResponse(final String token) {
+			this.token = token;
+		}
+	}
 }
