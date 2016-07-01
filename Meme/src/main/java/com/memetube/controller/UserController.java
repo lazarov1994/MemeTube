@@ -27,61 +27,50 @@ public class UserController {
 
 	@Autowired
 	private UserService us;
-	
-    private final Map<String, List<String>> userDb = new HashMap<>();
 
-    public UserController() {
-        userDb.put("tom", Arrays.asList("user"));
-        userDb.put("sally", Arrays.asList("user", "admin"));
-    }
+	private final Map<String, List<String>> userDb = new HashMap<>();
 
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public LoginResponse login(@RequestBody final UserCredentials login)
-        throws ServletException {
-    	
-    	us.authenticateUser(login.username, login.password);
-    	
-    	
-    	
-    	
-        if (login.username == null || !userDb.containsKey(login.username)) {
-            throw new ServletException("Invalid login");
-        }
-        return new LoginResponse(Jwts.builder().setSubject(login.username)
-            .claim("roles", userDb.get(login.username)).setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
-    }
-    
-    
-    @RequestMapping(value = "auth", method = RequestMethod.POST)
-    public LoginResponse auth(@RequestBody final UserCredentials login)
-    	
-    
-    
-        throws ServletException {
-        if (login.username == null || !userDb.containsKey(login.username)) {
-            throw new ServletException("Invalid login");
-        }
-        return new LoginResponse(Jwts.builder().setSubject(login.username)
-            .claim("roles", userDb.get(login.username)).setIssuedAt(new Date())
-            .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
-    }
-    
-    
-    
+	public UserController() {
+		userDb.put("tom", Arrays.asList("user"));
+		userDb.put("sally", Arrays.asList("user", "admin"));
+	}
 
-    @SuppressWarnings("unused")
-    private static class UserCredentials {
-        public String username;
-        public String password;
-    }
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	public LoginResponse login(@RequestBody final UserCredentials login) throws ServletException {
 
-    @SuppressWarnings("unused")
-    private static class LoginResponse {
-        public String token;
 
-        public LoginResponse(final String token) {
-            this.token = token;
-        }
-    }
+		if (!us.authenticateUser(login.username, login.password)) {
+			throw new ServletException("Invalid login");
+		}
+		return new LoginResponse(Jwts.builder().setSubject(login.username).claim("roles", userDb.get(login.username))
+				.setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretkey").compact());
+	}
+
+	@RequestMapping(value = "auth", method = RequestMethod.POST)
+	public LoginResponse auth(@RequestBody final UserCredentials login) throws ServletException {
+
+		if (login.username == null || login.password == null) {
+			throw new ServletException("Invalid login");
+		}
+
+		us.insertUser(login.username, login.password);
+
+		return new LoginResponse(Jwts.builder().setSubject(login.username).claim("roles", userDb.get(login.username))
+				.setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretkey").compact());
+	}
+
+	@SuppressWarnings("unused")
+	private static class UserCredentials {
+		public String username;
+		public String password;
+	}
+
+	@SuppressWarnings("unused")
+	private static class LoginResponse {
+		public String token;
+
+		public LoginResponse(final String token) {
+			this.token = token;
+		}
+	}
 }
