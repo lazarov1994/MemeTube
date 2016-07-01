@@ -38,6 +38,7 @@ public class UserRepositoryJdbc implements UserRepository {
 
             @Override
             public User doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                ps.execute();
                 return null;
             }
         });

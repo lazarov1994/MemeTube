@@ -16,6 +16,7 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.memetube.models.Meme;
+import com.memetube.models.VoteMeme;
 import com.memetube.rowmapper.MemeRowMapper;
 
 @Repository
@@ -54,42 +55,49 @@ public class MemeRepositoryJdbc implements MemeRepository {
     }
 
     @Override
-    public List<Meme> getMemesForCategory(Integer categoryId, int page, int pageSize) {
-        List<Meme> memes = jdbcTmpl.execute(new PreparedStatementCreator() {
+    public List<VoteMeme> getMemesForCategory(Integer categoryId, int page, int pageSize) {
+        List<VoteMeme> memes = jdbcTmpl.execute(new PreparedStatementCreator() {
 
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                String sql;
+                StringBuilder sql = new StringBuilder();
+                sql.append(" SELECT DISTINCT m.id, m.title, m.category_id,m.image, m.user_id, ");
+                sql.append(" (SELECT COUNT(CASE WHEN v.info=-1 THEN -1 END) FROM vote v LEFT JOIN meme m ON v.meme_id = m.id) AS downvotes, ");
+                sql.append(" (SELECT COUNT(CASE WHEN v.info=1 THEN 1 END) FROM vote v LEFT JOIN meme m ON v.meme_id = m.id) AS upvotes ");
+                sql.append(" FROM meme m ");
+                sql.append(" LEFT JOIN vote v ");
+                sql.append(" ON m.id = v.meme_id ");
+                sql.append(" WHERE m.id = v.meme_id ");
+
                 if (categoryId == null) {
-                    sql = " SELECT id, title, image, category_id, user_id FROM meme ";
-                    PreparedStatement ps = con.prepareStatement(sql);
+                    PreparedStatement ps = con.prepareStatement(sql.toString());
                     return ps;
 
                 } else {
-                    sql = " SELECT id, title, image, category_id, user_id FROM meme WHERE category_id = ?";
-                    PreparedStatement ps = con.prepareStatement(sql);
+                    PreparedStatement ps = con.prepareStatement(sql.append(" WHERE m.category_id = ? ").toString());
                     ps.setInt(1, categoryId);
                     return ps;
                 }
             }
-        }, new PreparedStatementCallback<List<Meme>>() {
+        }, new PreparedStatementCallback<List<VoteMeme>>() {
 
             @Override
-            public List<Meme> doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+            public List<VoteMeme> doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                 ps.execute();
                 ResultSet rs = ps.getResultSet();
-                List<Meme> m = new ArrayList<Meme>();
+                List<VoteMeme> m = new ArrayList<VoteMeme>();
                 while (rs.next()) {
-                    m.add(memeRowMapper.mapRow(rs, rs.getRow()));
+                   // m.add(memeRowMapper.mapRow(rs, rs.getRow()));
                 }
                 return m;
             }
         });
         int numOfMemes = memes.size();
-        if(numOfMemes <= pageSize) {
-            return memes;
-        } //else if (numOfMemes <){
         
+        if (numOfMemes <= pageSize) {
+            return memes;
+        } // else if (numOfMemes <){
+
         return memes;
     }
 

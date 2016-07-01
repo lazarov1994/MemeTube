@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.memetube.models.Meme;
+import com.memetube.models.VoteMeme;
 import com.memetube.repository.MemeRepository;
 
 @Transactional
@@ -22,7 +23,7 @@ public class MemeServiceImpl implements MemeService {
     }
 
     @Override
-    public List<Meme> getMemesForCategory(Integer categoryId, int page, int pageSize) {
+    public List<VoteMeme> getMemesForCategory(Integer categoryId, int page, int pageSize) {
         return memeRepo.getMemesForCategory(categoryId, page, pageSize);
     }
 
