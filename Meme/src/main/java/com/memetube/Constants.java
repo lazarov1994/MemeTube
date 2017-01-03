@@ -1,6 +1,6 @@
 package com.memetube;
 
 public class Constants {
-	//TEST
+	//TEST2
 	public static final int BCRYPT_WORKLOAD = 12;
 }
