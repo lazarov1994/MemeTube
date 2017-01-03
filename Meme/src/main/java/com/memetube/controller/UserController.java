@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.memetube.models.Meme;
+import com.memetube.models.VoteMeme;
+import com.memetube.service.MemeService;
 import com.memetube.service.UserService;
 
 import io.jsonwebtoken.Jwts;
@@ -30,6 +31,9 @@ public class UserController {
 	@Autowired
 	private UserService us;
 
+	@Autowired 
+	private MemeService ms;
+	
 	private final Map<String, List<String>> userDb = new HashMap<>();
 
 	public UserController() {
@@ -44,7 +48,10 @@ public class UserController {
 		if (!us.authenticateUser(login.username, login.password)) {
 			throw new ServletException("Invalid login");
 		}
-		return new LoginResponse(Jwts.builder().setSubject(login.username).claim("roles", userDb.get(login.username))
+		
+		int id = us.getUserByUsername(login.username).getId();
+		
+		return new LoginResponse(Jwts.builder().setSubject(login.username).claim("roles", "").claim("id", id)
 				.setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretkey").compact());
 	}
 
@@ -56,15 +63,19 @@ public class UserController {
 		}
 
 		us.insertUser(login.username, login.password);
+		int id = us.getUserByUsername(login.username).getId();
 
-		return new LoginResponse(Jwts.builder().setSubject(login.username).claim("roles", userDb.get(login.username))
+		return new LoginResponse(Jwts.builder().setSubject(login.username).claim("roles", "").claim("id", id)
 				.setIssuedAt(new Date()).signWith(SignatureAlgorithm.HS256, "secretkey").compact());
 	}
 	
-	@RequestMapping(value = "/meme", method = RequestMethod.GET)
-	public ResponseEntity<Meme> get(@RequestParam("category_id") int categoryId, @RequestParam("page") int page, @RequestParam("page_size") int pageSize) {
+	@RequestMapping(value = "/memes", method = RequestMethod.GET)
+	public ResponseEntity<List<VoteMeme>> get(@RequestParam("category_id") int categoryId, @RequestParam("page") int page, @RequestParam("page_size") int pageSize) {
 		//ms.getFrankenstainMeme ? 
-		return new ResponseEntity<Meme>(HttpStatus.OK);
+		
+		List<VoteMeme> listOfmemes = ms.getMemesForCategory(categoryId, page, pageSize);
+		
+		return new ResponseEntity<List<VoteMeme>>(listOfmemes, HttpStatus.OK);
 	}
 
 	@SuppressWarnings("unused")

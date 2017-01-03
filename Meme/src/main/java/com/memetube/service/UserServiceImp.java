@@ -34,7 +34,7 @@ public class UserServiceImp implements UserService {
 	@Override
 	public User getUserByUsername(String username) {
 		// TODO Auto-generated method stub
-		return null;
+		return ur.getUserByUsername(username);
 	}
 
 	private static String hashPassword(String password_plaintext) {

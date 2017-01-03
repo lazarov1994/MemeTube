@@ -8,7 +8,7 @@ import com.memetube.models.VoteMeme;
 public interface MemeService {
     public List<Category> getAllCategories();
 
-    public VoteMeme addMeme(String title, String image, int category, int userId);
+    public Integer addMeme(String title, String image, int category, int userId);
 
     public List<VoteMeme> getMemesForCategory(Integer categoryId, int page, int pageSize);
 

@@ -18,7 +18,7 @@ public class MemeServiceImpl implements MemeService {
     private MemeRepository memeRepo;
 
     @Override
-    public VoteMeme addMeme(String title, String image, int category, int userId) {
+    public Integer addMeme(String title, String image, int category, int userId) {
         return memeRepo.addMeme(title, image, category, userId);
     }
 
