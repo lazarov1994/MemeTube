@@ -11,5 +11,7 @@ public interface MemeService {
     public Integer addMeme(String title, String image, int category, int userId);
 
     public List<VoteMeme> getMemesForCategory(Integer categoryId, int page, int pageSize);
+    
+    public Integer getMemeCategoryOfTheDay();
 
 }

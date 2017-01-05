@@ -77,6 +77,14 @@ public class UserController {
 		
 		return new ResponseEntity<List<VoteMeme>>(listOfmemes, HttpStatus.OK);
 	}
+	
+	@RequestMapping(value = "/dayMemeType", method = RequestMethod.GET)
+	public ResponseEntity<Integer> getDayMemeType() {
+		//ms.getFrankenstainMeme ? 
+		
+		
+		return new ResponseEntity<>(null, HttpStatus.OK);
+	}
 
 	@SuppressWarnings("unused")
 	private static class UserCredentials {

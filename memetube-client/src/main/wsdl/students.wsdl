@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://concretepage.com/soap" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://concretepage.com/soap" targetNamespace="http://concretepage.com/soap">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://concretepage.com/soap">
+
+    <xs:element name="getStudentRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="studentId" type="xs:int"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getStudentResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="student" type="tns:student"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="student">
+        <xs:sequence>
+            <xs:element name="studentId" type="xs:int"/>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="age" type="xs:int"/>
+            <xs:element name="class" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getStudentResponse">
+    <wsdl:part element="tns:getStudentResponse" name="getStudentResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getStudentRequest">
+    <wsdl:part element="tns:getStudentRequest" name="getStudentRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="StudentsPort">
+    <wsdl:operation name="getStudent">
+      <wsdl:input message="tns:getStudentRequest" name="getStudentRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getStudentResponse" name="getStudentResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="StudentsPortSoap11" type="tns:StudentsPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getStudent">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getStudentRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getStudentResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="StudentsPortService">
+    <wsdl:port binding="tns:StudentsPortSoap11" name="StudentsPortSoap11">
+      <soap:address location="http://localhost:7070/spring4soap-1/soapws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
