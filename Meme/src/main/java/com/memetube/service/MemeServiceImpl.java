@@ -35,11 +35,20 @@ public class MemeServiceImpl implements MemeService {
 	}
 
 	@Override
-	public Integer getMemeCategoryOfTheDay() {
+	public Category getMemeCategoryOfTheDay() {
 		MemetubeClient mc = new MemetubeClient();
-		
 		// TODO Auto-generated method stub
-		return mc.getMemeCategoryOfTheDay().getStudent().getStudentId();
+		try {
+			com.memetube.generated.Category response = mc.getMemeCategoryOfTheDay().getCategory();
+			Category categoryModel = new Category();
+			categoryModel.setId(response.getId());
+			categoryModel.setName(response.getName());
+			return categoryModel;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 }

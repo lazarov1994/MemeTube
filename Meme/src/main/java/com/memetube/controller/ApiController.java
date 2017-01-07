@@ -38,13 +38,12 @@ public class ApiController {
 
 	@RequestMapping(value = "/memes", method = RequestMethod.POST)
 	public ResponseEntity<Integer> addVoteMeme(@RequestBody VoteMeme memeForAdd, final HttpServletRequest request) {
-		
-		
+
 		final Claims claims = (Claims) request.getAttribute("claims");
-		Integer userId =  (Integer) claims.get("id");
-		
+		Integer userId = (Integer) claims.get("id");
+
 		int memeId = ms.addMeme(memeForAdd.getTitle(), memeForAdd.getImage(), memeForAdd.getCategoryId(), userId);
-		
+
 		// ms.addVoteMeme
 		return new ResponseEntity<Integer>(memeId, HttpStatus.OK);
 	}
@@ -52,20 +51,19 @@ public class ApiController {
 	@RequestMapping(value = "/memes/{id}/upvote", method = RequestMethod.POST)
 	public ResponseEntity<VoteMeme> upVoteMeme(@PathVariable("id") int id, final HttpServletRequest request) {
 		// ms.upVoteVoteMeme
-		
+
 		final Claims claims = (Claims) request.getAttribute("claims");
-		Integer userId =  (Integer) claims.get("id");
-		
-		
+		Integer userId = (Integer) claims.get("id");
+
 		return new ResponseEntity<VoteMeme>(HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/memes/{id}/downvote", method = RequestMethod.POST)
 	public ResponseEntity<Integer> downVoteMeme(@PathVariable("id") int id, final HttpServletRequest request) {
-		
+
 		final Claims claims = (Claims) request.getAttribute("claims");
-		Integer userId =  (Integer) claims.get("id");
-		
+		Integer userId = (Integer) claims.get("id");
+
 		// ms.downVoteVoteMeme
 		return new ResponseEntity<Integer>(id, HttpStatus.OK);
 	}
@@ -83,6 +81,12 @@ public class ApiController {
 		// ms.getFrankenstainVoteMeme ?
 		List<VoteMeme> listOfMemes = ms.getMemesForCategory(categoryId, page, pageSize);
 		return new ResponseEntity<List<VoteMeme>>(listOfMemes, HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/memeOfTheDay", method = RequestMethod.GET)
+	public ResponseEntity<Category> getMemeOfTheDay() {
+		Category category = ms.getMemeCategoryOfTheDay();
+		return new ResponseEntity<Category>(category, HttpStatus.OK);
 	}
 
 }

@@ -12,6 +12,6 @@ public interface MemeService {
 
     public List<VoteMeme> getMemesForCategory(Integer categoryId, int page, int pageSize);
     
-    public Integer getMemeCategoryOfTheDay();
+    public Category getMemeCategoryOfTheDay();
 
 }

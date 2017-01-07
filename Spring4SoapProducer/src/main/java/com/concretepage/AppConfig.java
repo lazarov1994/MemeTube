@@ -15,10 +15,10 @@ import org.springframework.xml.xsd.XsdSchema;
 @ComponentScan("com.concretepage")
 public class AppConfig extends WsConfigurerAdapter {
 
-	@Bean(name = "students")
+	@Bean(name = "memes")
 	public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema studentsSchema) {
 		DefaultWsdl11Definition wsdl11Definition = new DefaultWsdl11Definition();
-		wsdl11Definition.setPortTypeName("StudentsPort");
+		wsdl11Definition.setPortTypeName("MemesPort");
 		wsdl11Definition.setLocationUri("/soapws");
 		wsdl11Definition.setTargetNamespace("http://concretepage.com/soap");
 		wsdl11Definition.setSchema(studentsSchema);
@@ -27,6 +27,6 @@ public class AppConfig extends WsConfigurerAdapter {
 
 	@Bean
 	public XsdSchema studentsSchema() {
-		return new SimpleXsdSchema(new ClassPathResource("students.xsd"));
+		return new SimpleXsdSchema(new ClassPathResource("memes.xsd"));
 	}
 }

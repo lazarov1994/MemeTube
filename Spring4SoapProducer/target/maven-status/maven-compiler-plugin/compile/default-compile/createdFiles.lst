@@ -1,2 +1,9 @@
-com\concretepage\AppConfig.class
 com\concretepage\WebAppInitializer.class
+com\concretepage\MemeEndpoint.class
+com\concretepage\soap\GetMemeCategoryOfTheDayRequest.class
+com\concretepage\soap\ObjectFactory.class
+com\concretepage\soap\GetMemeCategoryOfTheDayResponse.class
+com\concretepage\soap\Category.class
+com\concretepage\soap\package-info.class
+com\concretepage\MemeCategoryUtility.class
+com\concretepage\AppConfig.class

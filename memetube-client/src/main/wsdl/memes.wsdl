@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:sch="http://concretepage.com/soap" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://concretepage.com/soap" targetNamespace="http://concretepage.com/soap">
+  <wsdl:types>
+    <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://concretepage.com/soap">
+
+	<xs:element name="getMemeCategoryOfTheDayRequest">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="dayOfWeek" type="xs:int"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="getMemeCategoryOfTheDayResponse">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="category" type="tns:category"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="category">
+		<xs:sequence>
+			<xs:element name="id" type="xs:int"/>
+			<xs:element name="name" type="xs:string"/>
+		</xs:sequence>
+	</xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="getMemeCategoryOfTheDayResponse">
+    <wsdl:part element="tns:getMemeCategoryOfTheDayResponse" name="getMemeCategoryOfTheDayResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getMemeCategoryOfTheDayRequest">
+    <wsdl:part element="tns:getMemeCategoryOfTheDayRequest" name="getMemeCategoryOfTheDayRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="MemesPort">
+    <wsdl:operation name="getMemeCategoryOfTheDay">
+      <wsdl:input message="tns:getMemeCategoryOfTheDayRequest" name="getMemeCategoryOfTheDayRequest">
+    </wsdl:input>
+      <wsdl:output message="tns:getMemeCategoryOfTheDayResponse" name="getMemeCategoryOfTheDayResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MemesPortSoap11" type="tns:MemesPort">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getMemeCategoryOfTheDay">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="getMemeCategoryOfTheDayRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getMemeCategoryOfTheDayResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MemesPortService">
+    <wsdl:port binding="tns:MemesPortSoap11" name="MemesPortSoap11">
+      <soap:address location="http://localhost:7070/spring4soap-1/soapws"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
