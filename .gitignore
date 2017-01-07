@@ -20,4 +20,4 @@ target
 Servers
 .recommenders
 .classpath
-./Spring4SoapProducer/target
+/Spring4SoapProducer/target
